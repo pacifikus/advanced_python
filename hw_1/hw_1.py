@@ -1,50 +1,56 @@
 import ast
 import inspect
+import uuid
 from collections import deque
+from math import sqrt
 
+import astunparse
 import matplotlib.pyplot as plt
 import networkx as nx
 from networkx.drawing.nx_pydot import graphviz_layout
 
-
 ast_literals = ['Constant', 'List']
-ast_vars = ['Name', 'Load', 'Store']
-ast_control_flow = ['If']
+ast_math = ['Add', 'Sub', 'sqrt', 'Pow', 'Mult', 'Div']
 ast_expressions = [
     'Compare', 'Expr', 'Call', 'BinOp', 'Add', 'Eq', 'Sub', 'Subscript',
-    'UnaryOp', 'USub', 'Index', 'Attribute',
+    'UnaryOp', 'USub', 'Index', 'Attribute', 'For', 'Return'
 ]
 ast_statements = ['Assign']
-ast_functions = ['fib', 'Return', 'arg', 'n']
+ast_functions = ['fib', 'return', 'arg', 'n', 'fib_num', 'i', 'result']
 
 
 def fib(n):
-    if n == 0:
-        return [0]
-    elif n == 1:
-        return [0, 1]
-    else:
-        lst = fib(n - 1)
-        lst.append(lst[-1] + lst[-2])
-        return lst
+    result = []
+    for i in range(n):
+        fib_num = (((1 + sqrt(5)) ** n) - (1 - sqrt(5)) ** n) / (2 ** n * sqrt(5))
+        result.append(fib_num)
+    return result
 
 
 def get_node_label(node):
     if type(node) == ast.arguments:
         label = ', '.join([item.arg for item in node.args])
+    elif type(node) in [ast.Compare, ast.Name]:
+        label = astunparse.unparse(node).replace("\n", "")
+    elif type(node) == ast.Attribute:
+        label = astunparse.unparse(node).replace("\n", "").replace(".", ".\n")
+    elif type(node) == ast.Constant:
+        label = node.__class__.__name__ + "\n" + astunparse.unparse(
+            node,
+        ).replace("\n", "")
     elif hasattr(node, 'name'):
         label = node.name
     else:
         label = node.__class__.__name__
-    return label
+    return label.replace(':', '')
 
 
 def get_node_color(node_type):
     if node_type in ast_functions:
         return 'red'
-    elif node_type in ast_literals + ast_vars:
+    elif node_type in ast_literals:
         return 'pink'
-    elif node_type in ast_control_flow:
+    elif node_type in ast_math:
         return 'orange'
     return 'green'  # ast_expressions + ast_statements
 
@@ -54,17 +60,21 @@ def build_graph():
     G = nx.DiGraph()
     nodes = deque()
     start = next(ast.walk(fib_tree)).body[0]
-    nodes.append(start)
-    G.add_node(start.name)
+    start_id = str(uuid.uuid4())
+    nodes.append((start, start_id))
+    G.add_node(start_id, label=start.name)
 
     while len(nodes) != 0:
-        cur_node = nodes.pop()
+        cur_node, cur_node_id = nodes.pop()
         for node in ast.iter_child_nodes(cur_node):
+            if type(node) in [ast.Load, ast.Store]:
+                break
             node_label = get_node_label(node)
-            cur_node_label = get_node_label(cur_node)
-            G.add_node(node_label)
-            G.add_edge(cur_node_label, node_label)
-            nodes.append(node)
+            node_id = str(uuid.uuid4())
+            nodes.append((node, node_id))
+
+            G.add_node(node_id, label=node_label)
+            G.add_edge(cur_node_id, node_id)
     return G
 
 
@@ -80,14 +90,25 @@ def build_ast(G):
 
 
 def build_ast_beauty(G):
-    color_map = [get_node_color(node) for node in G]
+    color_map = []
 
     options = {
         "edge_color": "tab:gray",
         "node_size": 3000,
     }
     pos = graphviz_layout(G, prog="dot")
-    nx.draw(G, pos, with_labels=True, node_color=color_map, **options)
+    labels_dict = {}
+    for node in G.nodes(data=True):
+        labels_dict[node[0]] = node[1]['label']
+        color_map.append(get_node_color(node[1]['label'].split('\n')[0]))
+    nx.draw(
+        G,
+        pos,
+        labels=labels_dict,
+        with_labels=True,
+        node_color=color_map,
+        **options,
+    )
     plt.show()
 
 
