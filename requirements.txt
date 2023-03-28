@@ -2,3 +2,4 @@ networkx==3.0
 matplotlib==3.7.1
 pygraphviz==1.10
 astunparse==1.6.3
+fib-ast==0.1.0
