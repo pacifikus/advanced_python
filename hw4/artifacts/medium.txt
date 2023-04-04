@@ -1,0 +1,12 @@
+Type = none, n_jobs = 1, time = 0.0002029
+Type = none, n_jobs = 2, time = 0.0001406
+Type = none, n_jobs = 3, time = 0.0001381
+Type = none, n_jobs = 4, time = 0.0001455
+Type = thread, n_jobs = 1, time = 0.0955839
+Type = thread, n_jobs = 2, time = 0.1215171
+Type = thread, n_jobs = 3, time = 0.1169013
+Type = thread, n_jobs = 4, time = 0.1197149
+Type = process, n_jobs = 1, time = 0.2908800
+Type = process, n_jobs = 2, time = 0.2123897
+Type = process, n_jobs = 3, time = 0.2328227
+Type = process, n_jobs = 4, time = 0.2170729

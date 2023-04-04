@@ -1,0 +1,20 @@
+20:34:00 04-04-23  Main send QWERTY to process A
+20:34:00 04-04-23  Process A get QWERTY from main
+20:34:00 04-04-23  Process A send qwerty to process B
+20:34:00 04-04-23  Process B get qwerty from process A
+20:34:00 04-04-23  Process B send djregl to main
+20:34:06 04-04-23  Main send Hello world! to process A
+20:34:06 04-04-23  Process A get Hello world! from main
+20:34:06 04-04-23  Process A send hello world! to process B
+20:34:06 04-04-23  Process B get hello world! from process A
+20:34:06 04-04-23  Process B send uryyb jbeyq! to main
+20:34:11 04-04-23  Main send testTESTtest to process A
+20:34:11 04-04-23  Process A get testTESTtest from main
+20:34:11 04-04-23  Process A send testtesttest to process B
+20:34:11 04-04-23  Process B get testtesttest from process A
+20:34:11 04-04-23  Process B send grfggrfggrfg to main
+20:34:15 04-04-23  Main send Hello python to process A
+20:34:16 04-04-23  Process A get Hello python from main
+20:34:16 04-04-23  Process A send hello python to process B
+20:34:16 04-04-23  Process B get hello python from process A
+20:34:16 04-04-23  Process B send uryyb clguba to main
