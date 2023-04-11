@@ -4,3 +4,6 @@ pygraphviz==1.10
 astunparse==1.6.3
 fib-ast==0.1.0
 numpy==1.24.2
+aiohttp==3.8.4
+asyncio==3.4.3
+beautifulsoup4==4.12.2
